@@ -142,7 +142,6 @@
         <!--Filter-->
         <scene sceneID="jsu-x8-qDd">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="YkS-FM-ygf" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="mlj-bt-Asd" customClass="FilterViewController" customModule="Yelp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="FBB-2I-rP2"/>
@@ -209,6 +208,7 @@
                         <outlet property="tableView" destination="tTA-D1-VKb" id="Vcf-JW-BKC"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YkS-FM-ygf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1857" y="154"/>
         </scene>

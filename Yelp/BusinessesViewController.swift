@@ -37,7 +37,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         //            }
         //        })
         
-        Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
+        Business.searchWithTerm("Restaurants", sort: .Distance, categories: nil,  deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
             MBProgressHUD.hideHUDForView(self.view, animated: true)
@@ -89,8 +89,9 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     
     func filterViewController(filtersViewController: FilterViewController, didUpdateFilters filters: [String : AnyObject]) {
         var categories = filters["categories"] as? [String]
-        Business.searchWithTerm("Restaurants", sort: nil, categories: categories, deals: nil) {
+        Business.searchWithTerm("Restaurants", sort: nil, categories: categories, deals: true) {
             (businesses: [Business]!, error: NSError!) -> Void in
+            print(businesses)
             self.businesses = businesses
             self.tableView.reloadData()
         }
