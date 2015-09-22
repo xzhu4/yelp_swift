@@ -8,11 +8,12 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FilterViewControllerDelegate  {
+class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FilterViewControllerDelegate, UISearchBarDelegate {
 
     var businesses: [Business]!
     
     @IBOutlet weak var tableView: UITableView!
+    var searchBar: UISearchBar!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,10 +22,16 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
         
-        doSearch()
+        self.searchBar = UISearchBar()
+        navigationItem.titleView = self.searchBar
+        searchBar.delegate = self
+   
+        doSearch(nil)
     }
     
-    func doSearch() {
+    func doSearch(term: String?) {
+        
+        var term = (term == nil || term?.characters.count == 0) ? "Restaurants" : term
         
             MBProgressHUD.showHUDAddedTo(self.view, animated: true)
 
@@ -37,11 +44,17 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         //            }
         //        })
         
-        Business.searchWithTerm("Restaurants", sort: .Distance, categories: nil,  deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
+        Business.searchWithTerm(term!, sort: .Distance, categories: nil, distance: nil, deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
+
             self.tableView.reloadData()
-            MBProgressHUD.hideHUDForView(self.view, animated: true)
         }
+        MBProgressHUD.hideHUDForView(self.view, animated: true)
+
+    }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        doSearch(searchText)
     }
     
     
@@ -89,7 +102,9 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     
     func filterViewController(filtersViewController: FilterViewController, didUpdateFilters filters: [String : AnyObject]) {
         var categories = filters["categories"] as? [String]
-        Business.searchWithTerm("Restaurants", sort: nil, categories: categories, deals: true) {
+        var distance = filters["distance"] as? Int
+        var sort = filters["sort"] as? YelpSortMode
+        Business.searchWithTerm("Restaurants", sort: sort, categories: categories, distance: distance, deals: true) {
             (businesses: [Business]!, error: NSError!) -> Void in
             print(businesses)
             self.businesses = businesses

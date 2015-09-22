@@ -13,7 +13,8 @@ import UIKit
                   didUpdateFilters filters: [String:AnyObject])
 }
 
-class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwitchCellDelegate{
+class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDataSource,
+    SwitchCellDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
 
     
     @IBOutlet weak var tableView: UITableView!
@@ -23,11 +24,42 @@ class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var categories: [[String:String]]!
     var switchStates = [Int:Bool]()
     
+  
+    @IBOutlet weak var disPicker: UIPickerView!
+    var disOptions: [[String : AnyObject]]!
+    var disSelected: Int!
     
+ 
+    @IBOutlet weak var sortPicker: UIPickerView!
+    var sortOptions: [[String : AnyObject]]!
+    var sortSelected: Int!
+    
+    
+    @IBOutlet weak var isDeal: UISwitch!
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        
+        sortPicker.delegate = self
+        sortPicker.dataSource = self
+        sortOptions = [ ["title" : "Best Match", "value": 0],
+            ["title" : "Distance", "value": 1],
+            ["title" : "Highest Rated", "value": 2]
+        ]
+        
+        
+        disPicker.delegate = self
+        disPicker.dataSource = self
+        disOptions = [ ["title" : "Any distance", "value": 0],
+                       ["title" : "1 mile", "value": 1],
+                       ["title" : "5 miles", "value": 5],
+                       ["title" : "> 5 miles", "value": 20]]
+        disSelected = 0
+        
+
+        sortSelected = 0
+        
         self.categories = yelpCategories()
         
     }
@@ -56,6 +88,34 @@ class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.switchStates[indexPath.row] = value
     }
     
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        if (pickerView == disPicker) {
+            return disOptions.count
+        } else
+        {
+            return sortOptions.count
+        }
+    }
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        if (pickerView == disPicker) {
+            return disOptions[row]["title"] as! String
+        } else {
+            return sortOptions[row]["title"] as! String
+        }
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if (pickerView == disPicker) {
+            self.disSelected = row
+        } else {
+            self.sortSelected = row
+        }
+    }
     
     @IBAction func onCancel(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: nil)
@@ -77,9 +137,11 @@ class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if selectedCats.count > 0 {
             filters["categories"] = selectedCats
         }
+        filters["distance"] = disOptions[disSelected]["value"] as! Int
+        filters["sort"] = sortOptions[sortSelected]["value"] as! Int
+        filters["deals"] = isDeal.on 
+        print(filters["distance"])
         delegate?.filterViewController?(self, didUpdateFilters: filters)
-        
-        
     }
     
 

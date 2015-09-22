@@ -23,16 +23,19 @@ PODS:
   - BDBOAuth1Manager (1.5.0):
     - AFNetworking/NSURLConnection (~> 2.5.0)
     - AFNetworking/NSURLSession (~> 2.5.0)
+  - DownPicker (0.1.33)
   - MBProgressHUD (0.9.1)
 
 DEPENDENCIES:
   - AFNetworking
   - BDBOAuth1Manager
+  - DownPicker
   - MBProgressHUD
 
 SPEC CHECKSUMS:
   AFNetworking: e1d86c2a96bb5d2e7408da36149806706ee122fe
   BDBOAuth1Manager: 2e28773b58f880fb36b5cd3efcf0b1fefbc78a99
+  DownPicker: 3341f6241852a4b6671965c665c87a8ef9760ded
   MBProgressHUD: c47f2c166c126cf2ce36498d80f33e754d4e93ad
 
 COCOAPODS: 0.38.2
