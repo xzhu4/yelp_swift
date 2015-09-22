@@ -31,4 +31,4 @@ Time spent: `15`
 
 ### Walkthrough
 
-![Video Walkthrough](...)
+![Video Walkthrough](https://github.com/xzhu4/yelp_swift/blob/master/demo.gif)
